@@ -15,13 +15,13 @@ GREEN = (0, 255, 0)
 FPS = 60
 clock = pygame.time.Clock()
 
-bg = pygame.image.load('/Users/sovetkhandaniyar/Desktop/PP2/lab7/mickeyclock.jpg')
+bg = pygame.image.load('/Users/sovetkhandaniyar/Desktop/PP2/lab7/mickey.jpeg')
 BG_WIDTH = 500
 BG_HEIGHT = 500
 BG_X_POS = (SCREEN_WIDTH / 2 - BG_WIDTH / 2)
 BG_Y_POS = (SCREEN_HEIGHT / 2 - BG_HEIGHT / 2)
 
-big_arrow = pygame.image.load('/Users/sovetkhandaniyar/Desktop/PP2/lab7/mickeyclock.jpg')
+big_arrow = pygame.image.load('/Users/sovetkhandaniyar/Desktop/PP2/lab7/bigarrow.png')
 BIG_ARROW_WIDTH = 35
 BIG_ARROW_ASPECT_RATIO = 0.13
 BIG_ARROW_HEIGHT = BIG_ARROW_WIDTH / BIG_ARROW_ASPECT_RATIO
@@ -44,6 +44,5 @@ while running:
   rotated_big_arrow_rect.center = big_arrow_rect.center
   screen.blit(rotated_big_arrow, rotated_big_arrow_rect)
 
-  # Screen updating
   pygame.display.flip()
   clock.tick(FPS)

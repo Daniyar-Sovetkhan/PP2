@@ -15,13 +15,17 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Music Player with Keyboard Controls")
 
 music_dir = "/Users/sovetkhandaniyar/Downloads"
+
+
 music_files = [f for f in os.listdir(music_dir) if f.endswith(".mp3")]
+
 current_track = 0
 
 pygame.mixer.music.load(os.path.join(music_dir, music_files[current_track]))
 
 def play_music():
     pygame.mixer.music.play()
+    print(pygame.mixer.music.get_busy())
 
 def stop_music():
     pygame.mixer.music.stop()
@@ -54,7 +58,7 @@ while running:
                 previous_track()
 
     screen.fill(BLACK)
-
     pygame.display.flip()
 
 pygame.quit()
+

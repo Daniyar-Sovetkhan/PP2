@@ -1,48 +1,53 @@
 import pygame
 from datetime import datetime
+from time import sleep
 
-pygame.init() 
-SCREEN_WIDTH = 700
-SCREEN_HEIGHT = 700
-CENTER = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
+def blitRotate(surf, image, pos, originPos, angle):
+    
+    image_rect = image.get_rect(topleft=(pos[0] - originPos[0], pos[1] - originPos[1]))
+    offset_center_to_pivot = pygame.math.Vector2(pos) - image_rect.center
 
-FPS = 60
-clock = pygame.time.Clock()
+    rotated_offset = offset_center_to_pivot.rotate(-angle)
 
-bg = pygame.image.load('/Users/sovetkhandaniyar/Desktop/PP2/lab7/mickey.jpeg')
-BG_WIDTH = 500
-BG_HEIGHT = 500
-BG_X_POS = (SCREEN_WIDTH / 2 - BG_WIDTH / 2)
-BG_Y_POS = (SCREEN_HEIGHT / 2 - BG_HEIGHT / 2)
+    rotated_image_center = (pos[0] - rotated_offset.x, pos[1] - rotated_offset.y)
 
-big_arrow = pygame.image.load('/Users/sovetkhandaniyar/Desktop/PP2/lab7/bigarrow.png')
-BIG_ARROW_WIDTH = 35
-BIG_ARROW_ASPECT_RATIO = 0.13
-BIG_ARROW_HEIGHT = BIG_ARROW_WIDTH / BIG_ARROW_ASPECT_RATIO
-big_arrow = pygame.transform.scale(big_arrow, (BIG_ARROW_WIDTH, BIG_ARROW_HEIGHT))
+    rotated_image = pygame.transform.rotate(image, angle)
+    rotated_image_rect = rotated_image.get_rect(center=rotated_image_center)
 
-big_arrow_rect = big_arrow.get_rect()
-big_arrow_rect.center = CENTER
+    surf.blit(rotated_image, rotated_image_rect)
 
-running = True
-while running:  
-  for event in pygame.event.get():
-    if event.type == pygame.QUIT:
-      running = False
 
-  angle = datetime.now().second * -6
-  screen.fill(WHITE)
-  screen.blit(bg, (BG_X_POS, BG_Y_POS))
-  rotated_big_arrow = pygame.transform.rotate(big_arrow, angle)
-  rotated_big_arrow_rect = rotated_big_arrow.get_rect()
-  rotated_big_arrow_rect.center = big_arrow_rect.center
-  screen.blit(rotated_big_arrow, rotated_big_arrow_rect)
+pygame.init()
 
-  pygame.display.flip()
-  clock.tick(FPS)
+clocks = pygame.image.load("/Users/sovetkhandaniyar/Desktop/PP2/lab7/mickey.png/mainclock.png")
+minutes = pygame.image.load("/Users/sovetkhandaniyar/Desktop/PP2/lab7/smallarrow.png/minutes.png")
+seconds = pygame.image.load("/Users/sovetkhandaniyar/Desktop/PP2/lab7/bigarrow.png/seconds.png")
+
+screen = pygame.display.set_mode(clocks.get_size())
+
+w, h = seconds.get_size()
+minutes_pos = ((screen.get_width() / 2), (screen.get_height() / 2))
+seconds_pos = ((screen.get_width() / 2), (screen.get_height() / 2))
+
+done = False
+while not done:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+    now = datetime.now()
+
+    current_second = now.second+now.microsecond/1000000
+    seconds_angle = current_second * 6
+
+    minute_angle = (datetime.now().minute*6)+(seconds_angle / 60)
+
+    screen.blit(clocks, (0, 0))
+    blitRotate(screen, seconds, seconds_pos, ((w / 2) - 13, (h / 2) + 125), -seconds_angle)
+    blitRotate(screen, minutes, minutes_pos, ((w / 2), (h / 2) + 75), -minute_angle)
+    sleep(0.05)
+
+    pygame.display.flip()
+
+pygame.quit()
+exit()
